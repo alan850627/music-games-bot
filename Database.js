@@ -56,15 +56,41 @@ class Database {
 
   addQuestion(q, callback) {
     this.connection.query(`INSERT INTO dt_questions VALUES(
-      '${q.question_text.replace(/\'/g, '\'\'')}',
-      '${q.url.replace(/\'/g, '\'\'')}',
-      '${q.answer.replace(/\'/g, '\'\'')}',
-      '${q.user_id.replace(/\'/g, '\'\'')}',
+      '${this.mysql_real_escape_string(q.question_text)}',
+      '${this.mysql_real_escape_string(q.url)}',
+      '${this.mysql_real_escape_string(q.answer)}',
+      '${q.user_id}',
       '${q.state}',
       NULL
     );`, (error, results, fields) => {
       if (error) throw error;
       if (callback) callback();
+    });
+  }
+
+  mysql_real_escape_string (str) {
+    return str.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '')
+        .replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+        switch (char) {
+            case "\0":
+                return "\\0";
+            case "\x08":
+                return "\\b";
+            case "\x09":
+                return "\\t";
+            case "\x1a":
+                return "\\z";
+            case "\n":
+                return "\\n";
+            case "\r":
+                return "\\r";
+            case "\"":
+            case "'":
+            case "\\":
+            case "%":
+                return "\\"+char; // prepends a backslash to backslash, percent,
+                                  // and double/single quotes
+        }
     });
   }
 }

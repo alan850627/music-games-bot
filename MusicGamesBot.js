@@ -61,10 +61,11 @@ client.on('message', async message => {
   } else if (command.startsWith('.d')) {
     // delete question
     let qid = parseInt(arg);
-    if (!NaN) {
+    if (!qid) {
       message.channel.send('Invalid question ID.');
+      return;
     }
-    QuestionMan.deleteQuestion(message, message.author.id, );
+    QuestionMan.deleteQuestion(message, message.author.id, qid);
   } else if (command.startsWith('.l')) {
     // list questions
     QuestionMan.listQuestions(message, message.author.id);
