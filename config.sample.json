@@ -1,0 +1,11 @@
+{ 
+  "discord_token"  : "asdf",
+  "prefix" : ".",
+  "youtube_token": "asdf",
+  "my_sql": {
+  	"host": "localhost",
+  	"username": "alan850627",
+  	"password": "asdf",
+  	"database": "music_games"
+  }
+}
