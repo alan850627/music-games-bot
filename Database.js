@@ -60,6 +60,7 @@ class Database {
       '${this.mysql_real_escape_string(q.url)}',
       '${this.mysql_real_escape_string(q.answer)}',
       '${q.user_id}',
+      '${this.mysql_real_escape_string(q.user_name)}',
       '${q.state}',
       NULL
     );`, (error, results, fields) => {

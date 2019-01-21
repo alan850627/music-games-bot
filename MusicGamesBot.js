@@ -37,7 +37,7 @@ client.on('message', async message => {
     if (att) {
       url = att.url;
     }
-    QuestionMan.submitQuestion(message, message.author.id, arg, url);
+    QuestionMan.submitQuestion(message, message.author.id, message.author.username, arg, url);
   } else if (command.startsWith('.a')) {
     // submit an answer
     QuestionMan.submitAnswer(message, message.author.id, arg);

@@ -7,13 +7,13 @@ class QuestionMan {
     this.unconfirmed = {}
   }
 
-  submitQuestion(m, user_id, question_text, attachment) {
+  submitQuestion(m, user_id, user_name, question_text, attachment) {
     if (this.unconfirmed[user_id]) {
       m.channel.send('Use `.cancel` to resubmit the question.');
       return;
     }
     let q = new Question();
-    if (!q.setQuestion(user_id, question_text, attachment)) {
+    if (!q.setQuestion(user_id, user_name, question_text, attachment)) {
       m.channel.send('Use `.cancel` to resubmit the question.');
       return;
     }
