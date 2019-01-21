@@ -1,6 +1,7 @@
 
 Database = require('./Database.js');
 Question = require('./Question.js');
+config = require('./config.json');
 
 class QuestionMan {
   constructor() {
@@ -30,7 +31,7 @@ class QuestionMan {
       m.channel.send('Submit Answer Error! Please try again.');
       return;
     }
-    m.channel.send('Please review your submission. Type `.yes` to confirm, type `.cancel` to cancel.');
+    m.channel.send(`Please review your submission. Type `.yes` to confirm, type `.cancel` to cancel.\n---- Question k of ${config.questions_per_game} ----`);
     this.unconfirmed[user_id].sendQuestion(m, true);
   }
 
