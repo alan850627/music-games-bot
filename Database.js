@@ -47,7 +47,7 @@ class Database {
   }
 
   deleteQuestion(id, callback) {
-    this.connection.query(`DELETE FROM dt_questions WHERE question_id=${id}`, 
+    this.connection.query(`DELETE FROM dt_questions WHERE question_id=${id}`,
     (error, results, fields) => {
       if (error) throw error;
       if (callback) callback();
@@ -56,10 +56,10 @@ class Database {
 
   addQuestion(q, callback) {
     this.connection.query(`INSERT INTO dt_questions VALUES(
-      '${q.question_text}',
-      '${q.url}',
-      '${q.answer}',
-      '${q.user_id}',
+      '${q.question_text.replace(/\'/g, '\'\'')}',
+      '${q.url.replace(/\'/g, '\'\'')}',
+      '${q.answer.replace(/\'/g, '\'\'')}',
+      '${q.user_id.replace(/\'/g, '\'\'')}',
       '${q.state}',
       NULL
     );`, (error, results, fields) => {

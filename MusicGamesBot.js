@@ -5,12 +5,12 @@ const Arena = require('./Arena.js')
 const QuestionMan = require('./QuestionMan')
 
 client.on('ready', () => {
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
+  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
 });
 
 
 client.on('message', async message => {
- 
+
   if(message.author.bot) return;
 
   // check if it's a command for us!
@@ -60,7 +60,11 @@ client.on('message', async message => {
     QuestionMan.cancel(message, message.author.id);
   } else if (command.startsWith('.d')) {
     // delete question
-    QuestionMan.deleteQuestion(message, message.author.id, parseInt(arg));
+    let qid = parseInt(arg);
+    if (!NaN) {
+      message.channel.send('Invalid question ID.');
+    }
+    QuestionMan.deleteQuestion(message, message.author.id, );
   } else if (command.startsWith('.l')) {
     // list questions
     QuestionMan.listQuestions(message, message.author.id);

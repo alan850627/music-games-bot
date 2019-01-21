@@ -89,7 +89,7 @@ class Arena {
 
     // Skip the question.
     m.channel.send('Question skipped.');
-    nextQuestion(m);
+    this.nextQuestion(m);
   }
 
   gameOver(m) {
