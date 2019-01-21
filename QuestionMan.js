@@ -30,7 +30,7 @@ class QuestionMan {
       m.channel.send('Submit Answer Error! Please try again.');
       return;
     }
-    m.channel.send('Please review your submission. Type `.yes` to confirm, type `.cancel` to cancel');
+    m.channel.send('Please review your submission. Type `.yes` to confirm, type `.cancel` to cancel.');
     this.unconfirmed[user_id].sendQuestion(m, true);
   }
 

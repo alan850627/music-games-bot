@@ -1,9 +1,9 @@
 CREATE TABLE dt_questions
 (
-  question_text VARCHAR(50) NULL,
-  url VARCHAR(100) NULL,
-  answer VARCHAR(50) NOT NULL,
-  user_id VARCHAR(25) NOT NULL,
+  question_text VARCHAR(500) NULL,
+  url VARCHAR(200) NULL,
+  answer VARCHAR(100) NOT NULL,
+  user_id VARCHAR(30) NOT NULL,
   state TINYINT UNSIGNED NOT NULL,
   question_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY
 );

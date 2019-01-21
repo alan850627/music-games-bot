@@ -2,6 +2,7 @@ const fs = require('fs')
 const Question = require('./Question.js') 
 const Database = require('./Database.js')
 const AutoGrader = require('./AutoGrader.js')
+const config = require('./config.json')
 
 const e_game_status = {
   WAITING: 0,
@@ -46,11 +47,11 @@ class Arena {
         score -= 5;
       }
       this.leaderboard[ent.user_id] = score;
-      this.grading = false;
 
       if (res) {
         this.nextQuestion(ent.message);
       }
+      this.grading = false;
     })
   }
 
@@ -122,12 +123,12 @@ class Arena {
     this.autograder_timer = setInterval(() => {
       this.grade();
     }, 1000);
-    m.channel.send('Welcome to Alan\'s Music Games. There will be 10 questions per game. Type `.buzz <your answer>` to answer a question. The person with the fastest correct response will get 10 points. Getting an answer wrong will cost you 5 points. Have fun!')
+    m.channel.send(`Welcome to Alan\'s Music Games. There will be ${config.questions_per_game} questions per game. Type \`.buzz <your answer>\` to answer a question. The person with the fastest correct response will get 10 points. Getting an answer wrong will cost you 5 points. Have fun!`)
     this.nextQuestion(m);
   }
 
   nextQuestion(m) {
-    if (this.question_count >= 3) {
+    if (this.question_count >= config.questions_per_game) {
       return this.gameOver(m);
     }
     this.skip_counter = 0;
@@ -162,7 +163,7 @@ class Arena {
       m.channel.send('There are no questions left. DM me to submit one!');
       return;
     }
-    m.channel.send(`---- Question ${this.question_count} of 10 ----`);
+    m.channel.send(`---- Question ${this.question_count} of ${config.questions_per_game} ----`);
     this.current_question.sendQuestion(m, false);
   }
 }
