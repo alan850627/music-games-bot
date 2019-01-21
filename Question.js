@@ -19,7 +19,7 @@ class Question {
   }
 
   setQuestion(u, qt, qaurl) {
-    if (this.state !== e_state.INIT && 
+    if (this.state !== e_state.INIT &&
       this.state !== e_state.WAITING_FOR_QUESTION) {
       return;
     }
@@ -55,11 +55,11 @@ class Question {
     if (url.length > 0) {
       attachment = new Attachment(url);
     }
-    
+
     if (withDetail) {
-      m.channel.send(`Submitted by <@${this.user_id}>: ${this.question_text} (ID:${this.question_id}; Answer: _${this.answer})_`, attachment);
+      m.channel.send(`Submitted by <@${this.user_id}>: \n${this.question_text} (ID:${this.question_id}; Answer: _${this.answer})_`, attachment);
     } else {
-      m.channel.send(`Submitted by <@${this.user_id}>: ${this.question_text} (ID:${this.question_id})`, attachment);
+      m.channel.send(`Submitted by <@${this.user_id}>: \n${this.question_text} (ID:${this.question_id})`, attachment);
     }
   }
 
