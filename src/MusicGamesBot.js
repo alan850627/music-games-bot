@@ -18,8 +18,8 @@ client.on('message', async (message) => {
   if (str.indexOf(config.prefix) !== 0) return;
 
   const s = str.indexOf(' ');
-  let command = ''; let
-    arg = '';
+  let command = '';
+  let arg = '';
   if (s === -1) {
     command = str.toLowerCase();
     arg = '';

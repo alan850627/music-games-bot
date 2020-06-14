@@ -57,9 +57,9 @@ class Question {
     }
 
     if (withDetail) {
-      m.channel.send(`Submitted by <@${this.user_id}>: ${this.question_text} (ID:${this.question_id}; Answer: _${this.answer})_`, attachment);
+      m.channel.send(`Submitted by <@${this.user_id}>: \n${this.question_text} (ID:${this.question_id}; Answer: _${this.answer})_`, attachment);
     } else {
-      m.channel.send(`Submitted by <@${this.user_id}>: ${this.question_text} (ID:${this.question_id})`, attachment);
+      m.channel.send(`Submitted by <@${this.user_id}>: \n${this.question_text} (ID:${this.question_id})`, attachment);
     }
   }
 

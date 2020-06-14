@@ -54,7 +54,7 @@ class Arena {
   }
 
   submitGradeRequest(m, user_id, challenge) {
-    if (this.game_status === e_game_status.WAITING) {
+    if (this.game_status !== e_game_status.STARTED) {
       m.channel.send('Game not started. No buzzing allowed.');
       return;
     }
@@ -72,6 +72,10 @@ class Arena {
   }
 
   submitSkipRequest(m, user_id) {
+    if (this.game_status !== e_game_status.STARTED) {
+      m.channel.send('Game not started. What are you even trying to do?');
+      return;
+    }
     if (this.skip_obj[user_id]) {
       // if it has not been over a minute
       if (Date.now() - this.skip_obj[user_id] <= config.skip_timeout) {
@@ -122,6 +126,7 @@ class Arena {
 
   play(m) {
     if (this.game_status !== e_game_status.WAITING) {
+      this.repeatQuestion(m);
       return;
     }
     this.game_status = e_game_status.STARTED;
@@ -156,6 +161,10 @@ class Arena {
   }
 
   repeatQuestion(m) {
+    if (this.game_status !== e_game_status.STARTED) {
+      m.channel.send('Game not started! What are you doing?');
+      return;
+    }
     if (!this.current_question) {
       this.getNewQuestion(m);
     } else {
