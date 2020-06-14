@@ -3,6 +3,8 @@
   "prefix" : ".",
   "youtube_token": "asdf",
   "questions_per_game": 3,
+  "skip_threshold": 3,
+  "skip_timeout": 60000,
   "my_sql": {
   	"host": "localhost",
   	"username": "alan850627",

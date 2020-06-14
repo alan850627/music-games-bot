@@ -58,6 +58,13 @@ class Arena {
   submitGradeRequest(m, user_id, challenge) {
     if (this.game_status === e_game_status.WAITING) {
       m.channel.send('Game not started. No buzzing allowed.');
+      return;
+    }
+    if (this.current_question.user_id === user_id) {
+      m.channel.send('You cannot buzz your own question.');
+      m.channel.send(`<@${user_id}> -5`)
+      this.leaderboard[user_id] -= 5;
+      return;
     }
     this.grading_queue.push({
       message: m, 
@@ -69,7 +76,7 @@ class Arena {
   submitSkipRequest(m, user_id) {
     if (this.skip_obj[user_id]) {
       // if it has not been over a minute
-      if (Date.now() - this.skip_obj[user_id] <= 60000) {
+      if (Date.now() - this.skip_obj[user_id] <= config.skip_timeout) {
         m.channel.send('You have already tried to skip this question. Wait a while and you can submit another skip request.')
         return;
       }
@@ -77,14 +84,14 @@ class Arena {
     this.skip_obj[user_id] = Date.now();
     this.skip_counter += 1;
 
-    if (this.skip_counter < 3) {
-      m.channel.send(`${this.skip_counter}/3 votes to skip this question.`);
+    if (this.skip_counter < config.skip_threshold) {
+      m.channel.send(`${this.skip_counter}/${config.skip_threshold} votes to skip this question.`);
       return;
     }
 
     // Skip the question.
     m.channel.send('Question skipped.');
-    nextQuestion(m);
+    this.nextQuestion(m);
   }
 
   gameOver(m) {
@@ -123,7 +130,7 @@ class Arena {
     this.autograder_timer = setInterval(() => {
       this.grade();
     }, 1000);
-    m.channel.send(`Welcome to Alan\'s Music Games. There will be ${config.questions_per_game} questions per game. Type \`.buzz <your answer>\` to answer a question. The person with the fastest correct response will get 10 points. Getting an answer wrong will cost you 5 points. Have fun!`)
+    m.channel.send(`Welcome to Alan\'s Music Games. There will be ${config.questions_per_game} questions per game. Type \`${config.prefix}buzz [your answer]\` to answer a question. The person with the fastest correct response will get 10 points. Getting an answer wrong will cost you 5 points. Have fun!`)
     this.nextQuestion(m);
   }
 

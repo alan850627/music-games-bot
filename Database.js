@@ -56,9 +56,9 @@ class Database {
 
   addQuestion(q, callback) {
     this.connection.query(`INSERT INTO dt_questions VALUES(
-      '${q.question_text}',
-      '${q.url}',
-      '${q.answer}',
+      '${q.question_text.replace(/\'/g, '\\\'')}',
+      '${q.url.replace(/\'/g, '\\\'')}',
+      '${q.answer.replace(/\'/g, '\\\'')}',
       '${q.user_id}',
       '${q.state}',
       NULL
