@@ -1,10 +1,10 @@
-const config = require('./config.json')
+const config = require('../config.json');
 const Database = require('./Database.js');
 const Question = require('./Question.js');
 
 class QuestionMan {
   constructor() {
-    this.unconfirmed = {}
+    this.unconfirmed = {};
   }
 
   submitQuestion(m, user_id, question_text, attachment) {
@@ -12,7 +12,7 @@ class QuestionMan {
       m.channel.send(`Use \`${config.prefix}cancel\` to resubmit the question.`);
       return;
     }
-    let q = new Question();
+    const q = new Question();
     if (!q.setQuestion(user_id, question_text, attachment)) {
       m.channel.send(`Use \`${config.prefix}cancel\` to resubmit the question.`);
       return;
@@ -60,8 +60,8 @@ class QuestionMan {
     m.channel.send('Your question has been canceled.');
   }
 
-  deleteQuestion(m, user_id, question_id) {
-    if (isNaN(question_id)) {
+  static deleteQuestion(m, user_id, question_id) {
+    if (Number.isNaN(question_id)) {
       m.channel.send(`Invalid question ID to delete. The question ID must be a number, ie. \`${config.prefix}.delete 12\``);
       return;
     }
@@ -78,17 +78,17 @@ class QuestionMan {
 
       Database.deleteQuestion(question_id, () => {
         m.channel.send(`Question with ID ${question_id} successfully deleted.`);
-      })
+      });
     });
   }
 
-  listQuestions(m, user_id) {
+  static listQuestions(m, user_id) {
     Database.getQuestionListFromUser(user_id, (arr) => {
       m.channel.send(`You have ${arr.length} question(s) waiting to be played.`);
-      arr.forEach(q => {
+      arr.forEach((q) => {
         q.sendQuestion(m, true);
-      })
-    })
+      });
+    });
   }
 }
 

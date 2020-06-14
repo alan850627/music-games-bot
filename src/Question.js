@@ -19,9 +19,9 @@ class Question {
   }
 
   setQuestion(u, qt, qaurl) {
-    if (this.state !== e_state.INIT && 
-      this.state !== e_state.WAITING_FOR_QUESTION) {
-      return;
+    if (this.state !== e_state.INIT
+      && this.state !== e_state.WAITING_FOR_QUESTION) {
+      return false;
     }
     this.user_id = u;
     this.question_text = qt;
@@ -32,9 +32,9 @@ class Question {
   }
 
   setAnswer(a) {
-    if (this.state !== e_state.WAITING_FOR_ANSWER &&
-      this.state !== e_state.READY) {
-      return;
+    if (this.state !== e_state.WAITING_FOR_ANSWER
+      && this.state !== e_state.READY) {
+      return false;
     }
     this.answer = a;
     this.state = e_state.READY;
@@ -43,19 +43,19 @@ class Question {
 
   confirm() {
     if (this.state !== e_state.READY) {
-      return;
+      return false;
     }
     this.state = e_state.CONFIRMED;
     return this.state;
   }
 
   sendQuestion(m, withDetail) {
-    let attachment = undefined;
-    let url = this.url;
+    let attachment;
+    const { url } = this;
     if (url.length > 0) {
       attachment = new Attachment(url);
     }
-    
+
     if (withDetail) {
       m.channel.send(`Submitted by <@${this.user_id}>: ${this.question_text} (ID:${this.question_id}; Answer: _${this.answer})_`, attachment);
     } else {
@@ -64,15 +64,15 @@ class Question {
   }
 
   toJSON() {
-    let tmp = {
+    const tmp = {
       user_id: this.user_id,
       state: this.state,
       question_text: this.question_text,
       url: this.url,
-      answer: this.answer
-    }
+      answer: this.answer,
+    };
 
-    return JSON.stringify(tmp, null, 2)
+    return JSON.stringify(tmp, null, 2);
   }
 }
 

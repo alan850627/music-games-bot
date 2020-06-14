@@ -1,5 +1,5 @@
-const Database = require('../Database.js');
-const Question = require('../Question.js');
+const Database = require('../src/Database.js');
+const Question = require('../src/Question.js');
 
 let o = {
   user_id: '12345',
