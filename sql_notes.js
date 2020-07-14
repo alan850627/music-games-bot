@@ -15,5 +15,7 @@ CREATE TABLE questions
 );
 
 // RESET ALL QUESTIONS
-UPDATE questions SET played=0 WHERE question_id>"0";
-DELETE FROM questions WHERE question_id>"0";
+UPDATE questions SET played=0 WHERE question_id>"710";
+DELETE FROM questions WHERE question_id>"710";
+
+UPDATE questions SET played=0,play_count=0 WHERE question_id>"0";
