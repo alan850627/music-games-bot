@@ -92,7 +92,7 @@ class Arena {
     }
 
     // Skip the question.
-    m.channel.send('Question skipped.');
+    m.channel.send(`Question skipped. Correct answer: \`${this.current_question.answer}\``);
     this.nextQuestion(m);
   }
 
@@ -150,11 +150,14 @@ class Arena {
   }
 
   getNewQuestion(m) {
-    Database.getFirstQuestion((q) => {
+    Database.getNewQuestion((q) => {
       this.current_question = q;
       if (this.current_question) {
         this.question_count += 1;
-        Database.deleteQuestion(q.question_id);
+
+        // this is async, but it should process fast enough
+        // for it to matter. May look back at this later.
+        Database.markPlayed(this.current_question.question_id);
       }
       this.sendQuestion(m);
     });

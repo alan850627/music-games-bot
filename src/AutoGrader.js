@@ -17,7 +17,7 @@ class AutoGrader {
 
         const challenge_arr = challenge_results_raw.items.map((vid) => vid.id.videoId);
 
-        const common = this.compareTwoArraysIgnoreNull(correct_arr, challenge_arr);
+        const common = AutoGrader.compareTwoArraysIgnoreNull(correct_arr, challenge_arr);
         callback(common);
       });
     });

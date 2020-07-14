@@ -9,12 +9,13 @@ class Database {
       user: config.my_sql.username,
       password: config.my_sql.password,
       database: config.my_sql.database,
+      charset: 'utf8mb4'
     });
     this.connection.connect();
   }
 
   getQuestionListFromUser(user_id, callback) {
-    this.connection.query(`SELECT * FROM dt_questions WHERE user_id=${user_id}`,
+    this.connection.query(`SELECT * FROM questions WHERE user_id=${user_id}`,
       (error, results, fields) => { // eslint-disable-line no-unused-vars
         if (error) throw error;
         const ret = [];
@@ -25,8 +26,8 @@ class Database {
       });
   }
 
-  getFirstQuestion(callback) {
-    this.connection.query('SELECT * FROM dt_questions LIMIT 1',
+  getNewQuestion(callback) {
+    this.connection.query('SELECT * FROM questions WHERE played=0 ORDER BY RAND() LIMIT 1',
       (error, results, fields) => { // eslint-disable-line no-unused-vars
         if (error) throw error;
         if (callback) {
@@ -37,7 +38,7 @@ class Database {
   }
 
   getQuestion(id, callback) {
-    this.connection.query(`SELECT * FROM dt_questions WHERE question_id=${id}`,
+    this.connection.query(`SELECT * FROM questions WHERE question_id=${id}`,
       (error, results, fields) => { // eslint-disable-line no-unused-vars
         if (error) throw error;
         if (results[0]) callback(new Question(results[0]));
@@ -46,7 +47,15 @@ class Database {
   }
 
   deleteQuestion(id, callback) {
-    this.connection.query(`DELETE FROM dt_questions WHERE question_id=${id}`,
+    this.connection.query(`DELETE FROM questions WHERE question_id=${id}`,
+      (error, results, fields) => { // eslint-disable-line no-unused-vars
+        if (error) throw error;
+        if (callback) callback();
+      });
+  }
+
+  markPlayed(id, callback) {
+    this.connection.query(`UPDATE questions SET play_count=play_count+1, played=1 WHERE question_id=${id}`,
       (error, results, fields) => { // eslint-disable-line no-unused-vars
         if (error) throw error;
         if (callback) callback();
@@ -54,12 +63,14 @@ class Database {
   }
 
   addQuestion(q, callback) {
-    this.connection.query(`INSERT INTO dt_questions VALUES(
-      '${this.mysql_real_escape_string(q.question_text)}',
-      '${this.mysql_real_escape_string(q.url)}',
-      '${this.mysql_real_escape_string(q.answer)}',
+    this.connection.query(`INSERT INTO questions VALUES(
+      '${Database.mysql_real_escape_string(q.question_text)}',
+      '${Database.mysql_real_escape_string(q.url)}',
+      '${Database.mysql_real_escape_string(q.answer)}',
       '${q.user_id}',
       '${q.state}',
+      DEFAULT,
+      DEFAULT,
       NULL
     );`, (error, results, fields) => { // eslint-disable-line no-unused-vars
       if (error) throw error;
