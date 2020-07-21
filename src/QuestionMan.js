@@ -60,7 +60,7 @@ class QuestionMan {
     m.channel.send('Your question has been canceled.');
   }
 
-  static deleteQuestion(m, user_id, question_id) {
+  deleteQuestion(m, user_id, question_id) {
     if (Number.isNaN(question_id)) {
       m.channel.send(`Invalid question ID to delete. The question ID must be a number, ie. \`${config.prefix}.delete 12\``);
       return;
@@ -82,7 +82,7 @@ class QuestionMan {
     });
   }
 
-  static listQuestions(m, user_id) {
+  listQuestions(m, user_id) {
     Database.getQuestionListFromUser(user_id, (arr) => {
       m.channel.send(`You have ${arr.length} question(s) waiting to be played.`);
       arr.forEach((q) => {

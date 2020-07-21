@@ -38,7 +38,7 @@ class Arena {
       }
 
       if (res) {
-        ent.message.channel.send(`<@${ent.user_id}> +10`);
+        ent.message.channel.send(`<@${ent.user_id}> +10: \`${this.current_question.answer}\``);
         score += 10;
       } else {
         ent.message.channel.send(`<@${ent.user_id}> -5`);
