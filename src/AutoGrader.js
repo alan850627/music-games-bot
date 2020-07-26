@@ -1,26 +1,33 @@
-const YouTube = require('youtube-node');
-const config = require('../config.json');
+const fetch = require('node-fetch');
+
+const YOUTUBE_BASE_URL = 'https://www.youtube.com/results?search_query='
+const REGEX_VIDEO_ID = /{"videoId":"([A-Za-z0-9_-]+)"}/g
 
 class AutoGrader {
-  constructor() {
-    this.youTube = new YouTube();
-    this.youTube.setKey(config.youtube_token);
+  static async youTubeSearch(query, len) {
+  	const urlQuery = query.replace(/\ /g, '+');
+  	const res = await fetch(YOUTUBE_BASE_URL + urlQuery)
+  	const text = await res.text();
+
+  	return [...text.matchAll(REGEX_VIDEO_ID)].map((match) => {
+  	  return match[1]
+  	}).slice(0, len)
   }
 
-  grade(correct_answer, challenge, callback) {
-    this.youTube.search(correct_answer, 10, (error, correct_results_raw) => {
-      if (error) throw error;
-      const correct_arr = correct_results_raw.items.map((vid) => vid.id.videoId);
+  static async asyncGrade(correctAnswer, challenge, callback) {
+  	const correctArrPromise = AutoGrader.youTubeSearch(correctAnswer, 10)
+  	const challengeArrPromise = AutoGrader.youTubeSearch(challenge, 10)
+  	const res = await Promise.all([correctArrPromise, challengeArrPromise])
 
-      this.youTube.search(challenge, 10, (error2, challenge_results_raw) => {
-        if (error2) throw error2;
+  	return AutoGrader.compareTwoArraysIgnoreNull(...res)
+  }
 
-        const challenge_arr = challenge_results_raw.items.map((vid) => vid.id.videoId);
-
-        const common = AutoGrader.compareTwoArraysIgnoreNull(correct_arr, challenge_arr);
-        callback(common);
-      });
-    });
+  static grade(correctAnswer, challenge, callback) {
+  	AutoGrader.asyncGrade(correctAnswer, challenge).then(res => {
+  	  callback(res)
+  	}).catch(err => {
+  	  console.log(err)
+  	})
   }
 
   static compareTwoArraysIgnoreNull(arr1, arr2) {
@@ -39,4 +46,4 @@ class AutoGrader {
   }
 }
 
-module.exports = new AutoGrader();
+module.exports = AutoGrader;

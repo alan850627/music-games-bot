@@ -1,7 +1,6 @@
 { 
   "discord_token"  : "asdf",
   "prefix" : ".",
-  "youtube_token": "asdf",
   "questions_per_game": 3,
   "skip_threshold": 3,
   "skip_timeout": 60000,
